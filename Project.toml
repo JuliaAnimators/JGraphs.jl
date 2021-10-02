@@ -3,6 +3,12 @@ uuid = "8a2e793f-b7b0-428f-a348-4661ad99e970"
 authors = ["Giovanni Puccetti"]
 version = "0.1.0"
 
+[deps]
+Colors = "5ae59095-9a9b-59fe-a467-6f913c188581"
+Javis = "78b212ba-a7f9-42d4-b726-60726080707e"
+LightGraphs = "093fc24a-ae57-5d10-9952-331d41423f4d"
+NetworkLayout = "46757867-2c16-5918-afeb-47bfcb05e46a"
+
 [compat]
 julia = "1.6.2"
 
