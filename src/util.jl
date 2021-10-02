@@ -1,3 +1,3 @@
 function GB2Luxor(p)
-	Point(p...)
+    Point(p...)
 end

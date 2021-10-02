@@ -7,8 +7,10 @@ using Colors
 import NetworkLayout
 
 
-export JGraph
-export JGraphData
+export JGraph, JGraphData
+
+include("algorithms.jl")
+export Jkruskal_mst
 
 
 # Write your package code here.
@@ -17,8 +19,8 @@ include("struct.jl")
 
 function _JGraph(g::JGraphData)
 
-    points = [scaling * GB2Luxor(point) for point in layout(g.graph)]
-    sethue(node_color)
+    points = [g.scaling * GB2Luxor(point) for point in g.layout(g.graph)]
+    sethue(g.node_color)
     for point in points
         circle(point, g.node_size, :fill)
     end
@@ -30,27 +32,8 @@ function _JGraph(g::JGraphData)
     g
 end
 
-
-function JGraph(
-    graph,
-    layout,
-    node_color = colorant"black",
-    node_size = 3,
-    edge_color = colorant"black",
-    edge_width = 1,
-    scaling = 20,
-)
-    g = JGraphData(
-        graph,
-        layout,
-        node_color,
-        node_size,
-        edge_color,
-        edge_width,
-        scaling,
-    )
-    return (args...) ->
-        _JGraph(g)
+function JGraph(g)
+    return (args...) -> _JGraph(g)
 end
 
 end #module
