@@ -9,13 +9,18 @@ import NetworkLayout
 
 export JGraph, JGraphData
 
-include("algorithms.jl")
+include("util.jl")
+include("struct.jl")
+
+include("mst.jl")
 export Jkruskal_mst
+
+include("random_walk.jl")
+export Jrandom_walk
 
 
 # Write your package code here.
-include("util.jl")
-include("struct.jl")
+
 
 function _JGraph(g::JGraphData)
 
