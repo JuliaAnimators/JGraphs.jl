@@ -7,6 +7,7 @@ mutable struct JGraphData
     edge_color
     edge_width
     scaling
+    frames
 end
 
 function JGraphData(
@@ -17,7 +18,8 @@ function JGraphData(
     edge_color = colorant"black",
     edge_width = 1,
     scaling = 20,
+    frames = Javis.CURRENT_VIDEO[1].background_frames
 )
 
-    return JGraphData(graph, layout, node_color, node_size, edge_color, edge_width, scaling)
+    return JGraphData(graph, layout, node_color, node_size, edge_color, edge_width, scaling, frames)
 end
