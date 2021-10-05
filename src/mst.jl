@@ -1,28 +1,19 @@
-function Jmst(g::JGraphData, mst_func)
-    Object(JGraph(g))
-    points = [g.scaling * JGraphs.GB2Luxor(p) for p in g.layout(g.graph)]
-    mst = mst_func(g.graph)
+function Jmst(g::JGraph, mst_func)
+    mst = mst_func(g.data.graph)
+    Jnodes = jnodes(g)
+    Jedges = jedges(g)
     root = mst[1].src
-    step_length = g.frames[end] ÷ length(mst)
+    step_length = g.data.frames[end] ÷ length(mst)
     for (idx, e) in enumerate(mst)
-        ob = Object(
-            ((idx-1) * step_length) + 1:Javis.CURRENT_VIDEO[1].background_frames[end],
-            @JShape begin
-                if e.src == root || e.dst == root
-                    sethue("blue")
-                    circle(points[e.src], 3, :fill)
-                    # setline(3)
-                    line(points[e.src], points[e.dst], :stroke)
-                else
-                    sethue("red")
-                    circle(points[e.src], 3, :fill)
-                    # setline(3)
-                    line(points[e.src], points[e.dst], :stroke)
-                end
-                sethue("red")
-                circle(points[e.dst], 3, :fill)
-            end
+        color_anim = Animation(
+            [0.0, 1.0],
+            [Lab(colorant"black"), Lab(colorant"red")],
+            [sineio()]
         )
-        act!(ob, Action(1:step_length, appear(:fade)))
+        from = idx-1 * step_length + 1
+        to = idx * step_length
+        act!(Jnodes[e.src], Action(from:to, color_anim, sethue()))
+        act!(Jedges[e.src=>e.dst], Action(from:to, color_anim, sethue()))
+        act!(Jnodes[e.dst], Action(from:to, color_anim, sethue()))
     end
 end

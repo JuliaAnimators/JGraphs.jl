@@ -1,24 +1,26 @@
-function Jrandom_walk(g::JGraphData, random_walk_func)
-    Object(JGraph(g))
-    points = [g.scaling * JGraphs.GB2Luxor(p) for p in g.layout(g.graph)]
-    random_walk = random_walk_func(g.graph)
-    step_length = g.frames[end] ÷ length(random_walk)
+function Jrandom_walk(g::JGraph, random_walk_func)
+    Jnodes = jnodes(g)
+    Jedges = jedges(g)
+    random_walk = random_walk_func(g.data.graph)
+    step_length = g.data.frames[end] ÷ length(random_walk)
     root = random_walk[1]
-    for (idx, e) in enumerate(random_walk)
-        ob = Object(
-            ((idx-1) * step_length) + 1:Javis.CURRENT_VIDEO[1].background_frames[end],
-            @JShape begin
-                if e == root 
-                    sethue("blue")
-                    circle(points[e], 5, :fill)
-                else
-                    sethue("red")
-                    circle(points[e], 5, :fill)
-                    setline(3)
-                    line(points[e], points[random_walk[idx-1]], :stroke)
-                end
-            end
+    color_anim = Animation(
+            [0.0, 1.0],
+            [Lab(colorant"black"), Lab(colorant"red")],
+            [sineio()]
         )
-        act!(ob, Action(1:step_length, appear(:fade)))
+
+    # act!(root, Action(1:step_length, color_anim, sethue()))
+    for (idx, v) in enumerate(random_walk[1:end-1])
+        from = idx-1 * step_length + 1
+        to = idx * step_length
+        act!(Jnodes[v], Action(from:to, color_anim, sethue()))
+        if haskey(Jedges, v=>random_walk[idx+1])
+            ce = Jedges[v=>random_walk[idx+1]]
+            act!(ce, Action(from:to, color_anim, sethue()))
+        else
+            ce = Jedges[random_walk[idx+1] => v]
+            act!(ce, Action(from:to, color_anim, sethue()))
+        end
     end
 end
