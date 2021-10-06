@@ -7,7 +7,7 @@ using ReferenceTests
 using LightGraphs
 import NetworkLayout
 
-function ground(c1="white", c2="black")
+function ground(c1 = "white", c2 = "black")
     (args...) -> begin
         background(c1)
         sethue(c2)

@@ -19,9 +19,11 @@ function JGraphData(
     edge_color = colorant"black",
     edge_width = 1,
     scaling = 20,
-    frames = first(Javis.CURRENT_VIDEO[1].background_frames):last(Javis.CURRENT_VIDEO[1].background_frames),
+    frames = first(Javis.CURRENT_VIDEO[1].background_frames):last(
+        Javis.CURRENT_VIDEO[1].background_frames,
+    ),
     numbered = false,
-    positions = Luxor.Point[]
+    positions = Luxor.Point[],
 )
 
     return JGraphData(
@@ -34,7 +36,7 @@ function JGraphData(
         scaling,
         frames,
         numbered,
-        positions
+        positions,
     )
 end
 
@@ -47,9 +49,9 @@ end
 function _JGraph(g::JGraphData)
 
     points = [g.scaling * GB2Luxor(point) for point in g.layout(g.graph)]
-    
+
     g.positions = points
-    
+
     Jnodes = [
         Object(draw_node(center = point, radius = g.node_size, action = :fill)) for
         point in points
@@ -68,7 +70,7 @@ function _JGraph(g::JGraphData)
         for (idx, point) in enumerate(points)
             Object((args...) -> begin
                 label(string(idx), :N, pos(Jnodes[idx]))
-            end) 
+            end)
         end
     end
 
