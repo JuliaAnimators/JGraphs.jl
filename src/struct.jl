@@ -7,6 +7,7 @@ mutable struct JGraphData
     edge_width
     scaling
     frames
+    numbered
 end
 
 function JGraphData(
@@ -17,30 +18,56 @@ function JGraphData(
     edge_color = colorant"black",
     edge_width = 1,
     scaling = 20,
-    frames = Javis.CURRENT_VIDEO[1].background_frames
+    frames = Javis.CURRENT_VIDEO[1].background_frames,
+    numbered = false
 )
 
-    return JGraphData(graph, layout, node_color, node_size, edge_color, edge_width, scaling, frames)
+    return JGraphData(
+        graph,
+        layout,
+        node_color,
+        node_size,
+        edge_color,
+        edge_width,
+        scaling,
+        frames,
+        numbered
+    )
 end
 
 mutable struct JGraph
     data::JGraphData
     nodes::Vector{Object}
-    edges::Dict{Pair{Int64, Int64}, Object}
+    edges::Dict{Pair{Int64,Int64},Object}
 end
 
 function _JGraph(g::JGraphData)
 
     points = [g.scaling * GB2Luxor(point) for point in g.layout(g.graph)]
 
-    Jnodes = [Object(draw_node(center=point, radius=g.node_size, action=:fill)) for point in points]
     
+
+    Jnodes = [
+        Object(draw_node(center = point, radius = g.node_size, action = :fill)) for
+        point in points
+    ]
+
     Jedges = Dict([
-        (e.src => e.dst) => Object((args...) -> begin
-            setline(g.edge_width)
-            line(pos(Jnodes[e.src]), pos(Jnodes[e.dst]), :stroke)
-        end) for e in edges(g.graph)
+        (e.src => e.dst) => Object(
+            (args...) -> begin
+                setline(g.edge_width)
+                line(pos(Jnodes[e.src]), pos(Jnodes[e.dst]), :stroke)
+            end,
+        ) for e in edges(g.graph)
     ])
+
+    if g.numbered
+        for (idx, point) in enumerate(points)
+            Object((args...) -> begin
+                label(string(idx), :N, pos(Jnodes[idx]))
+            end) 
+        end
+    end
 
     return JGraph(g, Jnodes, Jedges)
 end
