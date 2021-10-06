@@ -33,17 +33,8 @@ function _JGraph(g::JGraphData)
 
     points = [g.scaling * GB2Luxor(point) for point in g.layout(g.graph)]
 
-    Jnodes = [Object(JCircle(point, g.node_size, action=:fill,color=g.node_color)) for point in points]
-
-    Jnodes = [Object((args...)-> begin 
-        circle(point, g.node_size, :fill)
-        point
-    end
-    )
-    for point in points]
+    Jnodes = [Object(draw_node(center=point, radius=g.node_size, action=:fill)) for point in points]
     
-            
-
     Jedges = Dict([
         (e.src => e.dst) => Object((args...) -> begin
             setline(g.edge_width)
