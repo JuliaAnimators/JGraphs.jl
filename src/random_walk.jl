@@ -1,4 +1,4 @@
-function Jrandom_walk(g::JGraph, random_walk_func)
+function jrandom_walk(g::JGraph, random_walk_func)
     Jnodes = jnodes(g)
     Jedges = jedges(g)
     random_walk = random_walk_func(g.data.graph)

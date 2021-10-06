@@ -1,0 +1,8 @@
+[deps]
+Images = "916415d5-f1e6-5110-898d-aaa5f9f070e0"
+Javis = "78b212ba-a7f9-42d4-b726-60726080707e"
+LightGraphs = "093fc24a-ae57-5d10-9952-331d41423f4d"
+NetworkLayout = "46757867-2c16-5918-afeb-47bfcb05e46a"
+ReferenceTests = "324d217c-45ce-50fc-942e-d289b448e8cf"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+VideoIO = "d6d074c3-1acf-5d4c-9a43-ef38773959a2"

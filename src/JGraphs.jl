@@ -8,17 +8,19 @@ using Animations
 import NetworkLayout
 
 include("util.jl")
+export GB2Luxor, draw_node
+
 include("struct.jl")
 export JGraph, JGraphData, JGraphContainer
-export Jnodes, Jedges
+export jnodes, jedges
 
 include("mst.jl")
-export Jmst
+export jmst
 
 include("random_walk.jl")
-export Jrandom_walk
+export jrandom_walk
 
 include("morph.jl")
-export graph_morph
+export jgraph_morph
 
 end #module

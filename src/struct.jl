@@ -19,7 +19,7 @@ function JGraphData(
     edge_color = colorant"black",
     edge_width = 1,
     scaling = 20,
-    frames = Javis.CURRENT_VIDEO[1].background_frames,
+    frames = first(Javis.CURRENT_VIDEO[1].background_frames):last(Javis.CURRENT_VIDEO[1].background_frames),
     numbered = false,
     positions = Luxor.Point[]
 )

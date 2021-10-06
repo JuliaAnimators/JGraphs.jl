@@ -1,4 +1,4 @@
-function Jmst(g::JGraph, mst_func)
+function jmst(g::JGraph, mst_func)
     mst = mst_func(g.data.graph)
     Jnodes = jnodes(g)
     Jedges = jedges(g)
