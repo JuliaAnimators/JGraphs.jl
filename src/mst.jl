@@ -9,7 +9,7 @@ function Jmst(g::JGraph, mst_func)
     for (idx, e) in enumerate(mst)
         from = (idx - 1) * step_length + 1
         to = idx * step_length
-        
+
         !(e.src in acted_nodes) &&
             act!(Jnodes[e.src], Action(from:to, color_anim, sethue()))
         push!(acted_nodes, e.src)
@@ -18,6 +18,10 @@ function Jmst(g::JGraph, mst_func)
             act!(Jnodes[e.dst], Action(from:to, color_anim, sethue()))
         push!(acted_nodes, e.dst)
 
-        act!(Jedges[e.src => e.dst], Action(from:to, color_anim, sethue()))
+        if haskey(Jedges, e.src => e.dst)
+            act!(Jedges[e.src => e.dst], Action(from:to, color_anim, sethue()))
+        else
+            act!(Jedges[e.dst => e.src], Action(from:to, color_anim, sethue()))
+        end
     end
 end

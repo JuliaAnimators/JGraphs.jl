@@ -18,4 +18,7 @@ export Jmst
 include("random_walk.jl")
 export Jrandom_walk
 
+include("morph.jl")
+export graph_morph
+
 end #module
