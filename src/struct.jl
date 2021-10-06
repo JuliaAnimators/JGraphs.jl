@@ -8,6 +8,7 @@ mutable struct JGraphData
     scaling
     frames
     numbered
+    positions
 end
 
 function JGraphData(
@@ -19,7 +20,8 @@ function JGraphData(
     edge_width = 1,
     scaling = 20,
     frames = Javis.CURRENT_VIDEO[1].background_frames,
-    numbered = false
+    numbered = false,
+    positions = Luxor.Point[]
 )
 
     return JGraphData(
@@ -31,7 +33,8 @@ function JGraphData(
         edge_width,
         scaling,
         frames,
-        numbered
+        numbered,
+        positions
     )
 end
 
@@ -44,9 +47,9 @@ end
 function _JGraph(g::JGraphData)
 
     points = [g.scaling * GB2Luxor(point) for point in g.layout(g.graph)]
-
     
-
+    g.positions = points
+    
     Jnodes = [
         Object(draw_node(center = point, radius = g.node_size, action = :fill)) for
         point in points
