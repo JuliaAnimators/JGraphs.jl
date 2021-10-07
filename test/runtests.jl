@@ -6,6 +6,7 @@ using VideoIO
 using ReferenceTests
 using LightGraphs
 import NetworkLayout
+import GeometryBasics
 
 function ground(c1 = "white", c2 = "black")
     (args...) -> begin

@@ -1,5 +1,6 @@
 
 
+
 @testset "tmpdir" begin
 
     #=
@@ -14,7 +15,7 @@
     @test length(readdir("images")) == length(EXCLUDE_FILES)
 end
 
-@testset "draw node" begin
+@testset "util" begin
 
     testvideo = Video(200, 200)
     Background(1:20, ground())
@@ -26,6 +27,8 @@ end
     for image in readdir("images", join = true)
         endswith(image, "png") && rm(image)
     end
+
+    @test GB2Luxor(GeometryBasics.Point(10, 10)) == Point(10, 10)
 end
 
 @testset "complete graph" begin

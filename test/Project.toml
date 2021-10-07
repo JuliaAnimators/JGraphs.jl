@@ -1,4 +1,5 @@
 [deps]
+GeometryBasics = "5c1252a2-5f33-56bf-86c9-59e7332b4326"
 Images = "916415d5-f1e6-5110-898d-aaa5f9f070e0"
 Javis = "78b212ba-a7f9-42d4-b726-60726080707e"
 LightGraphs = "093fc24a-ae57-5d10-9952-331d41423f4d"
