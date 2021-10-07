@@ -68,3 +68,7 @@ end
         endswith(image, "png") && rm(image)
     end
 end
+
+@testset "randomwalk" begin
+    @test true
+end
