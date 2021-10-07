@@ -13,7 +13,10 @@ makedocs(;
         canonical = "https://gpucce.github.io/JGraphs.jl",
         assets = String[],
     ),
-    pages = ["Home" => "index.md"],
+    pages = [
+        "Home" => "index.md",
+        "Examples" => "examples.md"
+    ],
 )
 
 deploydocs(; repo = "github.com/gpucce/JGraphs.jl", devbranch="main")
