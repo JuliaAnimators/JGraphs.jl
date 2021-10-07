@@ -1,3 +1,4 @@
 [deps]
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
-LightGraphs = "093fc24a-ae57-5d10-9952-331d41423f4d"
+JGraphs = "8a2e793f-b7b0-428f-a348-4661ad99e970"
+Javis = "78b212ba-a7f9-42d4-b726-60726080707e"
