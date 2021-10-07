@@ -91,7 +91,7 @@ function _JGraph(g::JGraphData)
     if g.numbered
         for (idx, jnode) in enumerate(Jnodes)
             Object((args...) -> begin
-                label(string(idx), :N, pos(Jnode))
+                label(string(idx), :N, pos(jnode))
             end)
         end
     end
