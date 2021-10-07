@@ -1,7 +1,19 @@
-function jrandom_walk(g::JGraph, random_walk_func)
+"""
+    jgraph_walk(g::JGraph, walk_func)
+
+This function will iteratively change the colors of nodes and edges in a graph
+to draw a path along them of the graph.
+
+# Arguments
+- `g::JGraph` the `JGraph` on which the walk should be animated
+- `walk_func` a function that takes as argument and `AbstractGraph` and returns
+a set of nodes linked each to the following one by and edge present in the graph.
+One can use `randomwalk` and `non_backtracking_randomwalk` from `LightGraphs`.
+"""
+function jgraph_walk(g::JGraph, walk_func)
     Jnodes = jnodes(g)
     Jedges = jedges(g)
-    random_walk = random_walk_func(g.data.graph)
+    random_walk = walk_func(g.data.graph)
     step_length = g.data.frames[end] ÷ length(random_walk)
     color_anim =
         Animation([0.0, 1.0], [Lab(colorant"black"), Lab(colorant"red")], [sineio()])

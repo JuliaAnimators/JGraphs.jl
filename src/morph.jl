@@ -1,3 +1,18 @@
+"""
+    jgraph_morph(g::JGraph, layout_to, scaling_to; frames=nothing)
+
+This functions allows to animate the change from one layout to another for a graph.
+
+# Arguments
+- `g::JGraph` the `JGraph` to animate.
+- `layout_to` a `NetworkLayout.AbstractLayout` that will be applied to nodes and edges 
+to determine the configuration to reach.
+- `scaling_to` an scaling factor to scale the positions of nodes and edges in the animation.
+
+# Keywords
+- `frames` a range of frames during which the the morph will take place.
+If not specified the animation will last as long aas the JGraph itself.
+"""
 function jgraph_morph(g::JGraph, layout_to, scaling_to; frames = nothing)
     Jnodes = jnodes(g)
     current_positions = g.data.positions

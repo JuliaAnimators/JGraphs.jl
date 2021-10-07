@@ -18,7 +18,7 @@ include("mst.jl")
 export jmst
 
 include("random_walk.jl")
-export jrandom_walk
+export jgraph_walk
 
 include("morph.jl")
 export jgraph_morph

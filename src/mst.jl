@@ -1,3 +1,17 @@
+
+"""
+    jmst(g::JGraph, mst_func)
+
+Function used to animate the appearance of a minimum spannin tree
+on a `JGraph`.
+
+# Arguments
+- `g::JGraph` the `JGraph` to use for the animation.
+- `mst_func` a function that takes an `AbstractGraph` as an arguments and
+return a list of `edge`s as defined in `LightGraphs`. One can use `kruskal_mst` 
+and `prim_mst` defined in `LightGraphs`. 
+"""
+
 function jmst(g::JGraph, mst_func)
     mst = mst_func(g.data.graph)
     Jnodes = jnodes(g)
