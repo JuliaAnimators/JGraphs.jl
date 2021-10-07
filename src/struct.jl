@@ -13,7 +13,7 @@ end
 
 function JGraphData(
     graph::AbstractGraph,
-    layout::NetworkLayout.AbstractLayout=NetworkLayout.Shell();
+    layout::NetworkLayout.AbstractLayout = NetworkLayout.Shell();
     node_color = colorant"black",
     node_size = 3,
     edge_color = colorant"black",
