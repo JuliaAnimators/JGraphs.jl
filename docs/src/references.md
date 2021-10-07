@@ -1,4 +1,4 @@
-# Public functions
+# API Reference
 
 ```@autodocs
 Modules = [JGraphs]

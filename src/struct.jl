@@ -124,11 +124,11 @@ end
 
 Accessor function to get access to the `jnodes` stored in a `JGraph`. 
 """
-jnodes(Jg::JGraph) = Jg.nodes
+jnodes(Jg::JGraph) = Jg.jnodes
 
 """
     jedges(jg::JGraph)
 
 Accessor function to get access to the `jedges` stored in a `JGraph`. 
 """
-jedges(Jg::JGraph) = Jg.edges
+jedges(Jg::JGraph) = Jg.jedges
