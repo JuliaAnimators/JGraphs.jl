@@ -1,9 +1,5 @@
-Manifest.toml
-test.png
-
 *.jl.*.cov
 *.jl.cov
 *.jl.mem
 /docs/build/
-.vscode/
-.commit
+Manifest.toml
