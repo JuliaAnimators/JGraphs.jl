@@ -97,13 +97,13 @@ end
     testvideo = Video(400, 400)
     Background(1:100, ground("white", "black"))
     g = barbell_graph(5, 10)
-    gd = JGraphData(g, NetworkLayout.Spring(), scaling = 40, numbered = true)
+    gd = JGraphData(g, NetworkLayout.Spring(), scaling = 40)
     jg = JGraph(gd)
     jgraph_walk(jg, g -> vertices(g))
     jgraph_morph(jg, NetworkLayout.Shell(), 100)
     render(testvideo, tempdirectory = "images", pathname = "")
 
-    for frame_id in [1, 5, 50, 75, 100]
+    for frame_id in [1, 5, 10, 50, 75, 100]
         @test_reference "refs/test_walk_morph_$(frame_id).png" load(
             "images/$(lpad(frame_id, 10, "0")).png",
         )
