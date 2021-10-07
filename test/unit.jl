@@ -69,6 +69,23 @@ end
     end
 end
 
-@testset "randomwalk" begin
-    @test true
+@testset "jgraph_walk" begin
+    testvideo = Video(400, 400)
+    Background(1:30, ground())
+    g = complete_graph(8)
+    gd = JGraphData(g, NetworkLayout.Shell(), scaling = 100)
+    jg = JGraph(gd)
+
+    jgraph_walk(jg, g->[vertices(g);1])
+    render(testvideo, tempdirectory="images", pathname="")
+
+    for frame_id in [1, 8, 15, 23, 30]
+        @test_reference "refs/test_jgraph_walk_$(frame_id).png" load(
+            "images/$(lpad(frame_id, 10, "0")).png",
+        )
+    end
+
+    for image in readdir("images", join = true)
+        endswith(image, "png") && rm(image)
+    end
 end
