@@ -76,11 +76,32 @@ end
     gd = JGraphData(g, NetworkLayout.Shell(), scaling = 100)
     jg = JGraph(gd)
 
-    jgraph_walk(jg, g->[vertices(g);1])
-    render(testvideo, tempdirectory="images", pathname="")
+    jgraph_walk(jg, g -> [vertices(g); 1])
+    render(testvideo, tempdirectory = "images", pathname = "")
 
     for frame_id in [1, 8, 15, 23, 30]
         @test_reference "refs/test_jgraph_walk_$(frame_id).png" load(
+            "images/$(lpad(frame_id, 10, "0")).png",
+        )
+    end
+
+    for image in readdir("images", join = true)
+        endswith(image, "png") && rm(image)
+    end
+end
+
+@testset "jgraph_walk jgraph_morph" begin
+    testvideo = Video(400, 400)
+    Background(1:100, ground("white", "black"))
+    g = barbell_graph(5, 10)
+    gd = JGraphData(g, NetworkLayout.Spring(), scaling = 40, numbered = true)
+    jg = JGraph(gd)
+    jgraph_walk(jg, g -> vertices(g))
+    jgraph_morph(jg, NetworkLayout.Shell(), 100)
+    render(testvideo, tempdirectory = "images", pathname = "")
+
+    for frame_id in [1, 5, 50, 75, 100]
+        @test_reference "refs/test_walk_morph_$(frame_id).png" load(
             "images/$(lpad(frame_id, 10, "0")).png",
         )
     end
