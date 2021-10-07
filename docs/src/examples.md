@@ -5,6 +5,8 @@ Some examples of what `JGraphs` together with `Javis` might help you animate!
 ![](assets/example1.gif)
 
 ```julia
+    using LightGraphs, NetworkLayout, JGraphs, Javis 
+
     startinglayout = Spring(dim=2)
     startingscaling = 50
     
