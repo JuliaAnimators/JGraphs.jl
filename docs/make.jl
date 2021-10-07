@@ -16,8 +16,8 @@ makedocs(;
     pages = [
         "Home" => "index.md",
         "Examples" => "examples.md",
-        "References" => "references.md"
+        "References" => "references.md",
     ],
 )
 
-deploydocs(; repo = "github.com/gpucce/JGraphs.jl", devbranch="main")
+deploydocs(; repo = "github.com/gpucce/JGraphs.jl", devbranch = "main")
