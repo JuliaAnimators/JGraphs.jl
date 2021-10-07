@@ -14,15 +14,14 @@ end
 """
     JGraphData(graph::AbstractGraph, layout::NetworkLayout.AbstractLayout; kwargs...)
 
-The `JGraphData` is the structure used to set all the properties of the graph Animation,
-the graph itself, its layout and all the properties useful to animate it in the appropriate way.
+The `JGraphData` is the structure used to set all the properties of the graph animation,
+the graph itself, its layout and all the options useful to animate it in the appropriate way.
 It should be passed to `JGraph` to obtain an animation with the specified properties.
-The keyword arguments are supposed to increase in the future.
+The keyword arguments will increase to increase in the future.
 
 # Arguments 
 - `graph::AbstractGraph`: A graph as created with `LightGraphs` and affiliate packages
-- `layout::NetworkLayout.AbstractLayout`: A layout as provided by `NetworkLayout` to place the 
-graph nodes in sapce.
+- `layout::NetworkLayout.AbstractLayout`: A layout as provided by `NetworkLayout` to place the graph nodes in sapce.
 
 # Keywords
 - `node_color` sets the color of all nodes
@@ -31,8 +30,7 @@ graph nodes in sapce.
 - `edges_width` sets the width of all edges
 - `scaling` scales the positions of all nodes
 - `frames` the frames during which the animations on the graph will last if not specified elsewhere
-- `numbered` Defaults to `false` if set to `true` labels the nodes with their number as vertices 
-in the graph.
+- `numbered` Defaults to `false` if set to `true` labels the nodes with their number as vertices in the graph.
 """
 function JGraphData(
     graph::AbstractGraph,
@@ -63,18 +61,7 @@ function JGraphData(
     )
 end
 
-"""
-    JGraph(g::JGraphData)
 
-The `JGraph` structure is the core structure of the package when called
-with a `JGraphData` argument creates and `Object` for each node in the graph 
-and stores them in `jnodes` and an `Object` for each edge and stores them in `jedges`. 
-Note that the nodes are stored in a `Vector`, whereas the edges are stored in a `Dict` 
-with pairs of nodes (integers) as keys.
-
-***Note*** Since `JGraph` stores `Object`s it can only be called after a `Video`
-has been initialized look at `Javis` documentation to know all about it.
-"""
 mutable struct JGraph
     data::JGraphData
     jnodes::Vector{Object}
@@ -113,7 +100,19 @@ function _JGraph(g::JGraphData)
 end
 
 
+"""
+    JGraph(g::JGraphData)
 
+The `JGraph` structure is the core structure of the package when called
+with a `JGraphData` argument creates and `Object` for each node in the graph 
+and stores them in `jnodes` and an `Object` for each edge and stores them in `jedges`. 
+Note that `jnodes` is a `Vector`, whereas `jedges` is a `Dict` with pairs of nodes (integers) 
+as keys.
+
+!!! note 
+    Since `JGraph` stores `Object`s it can only be called after a `Video`
+    has been initialized look at `Javis` documentation to know all about it.
+"""
 function JGraph(g)
     _JGraph(g)
 end
@@ -122,13 +121,17 @@ end
 """
     jnodes(jg::JGraph)
 
-Accessor function to get access to the `jnodes` stored in a `JGraph`. 
+Accessor function to the `jnodes` stored in a `JGraph`. 
 """
-jnodes(Jg::JGraph) = Jg.jnodes
+function jnodes(jg::JGraph)
+    jg.jnodes
+end
 
 """
     jedges(jg::JGraph)
 
-Accessor function to get access to the `jedges` stored in a `JGraph`. 
+Accessor function to the `jedges` stored in a `JGraph`. 
 """
-jedges(Jg::JGraph) = Jg.jedges
+function jedges(jg::JGraph)
+    jg.jedges
+end
