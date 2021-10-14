@@ -5,9 +5,7 @@
 Transforms a `Point` defined in `GeometryBasics` into one defined 
 in `Luxor`.
 """
-function GB2Luxor(p)
-    Point(p...)
-end
+GB2Luxor(p) = Point(p...)
 
 """
     draw_node(args; center, radius, action)
