@@ -130,3 +130,14 @@ Accessor function to the `jedges` stored in a `JGraph`.
 function jedges(jg::JGraph)
     jg.jedges
 end
+
+
+"""
+    get_starting_positions(g::JGraph)
+
+Returns the positions as obtained using the layout and the graph stored
+in `g.data`.
+"""
+function get_starting_positions(g::JGraph)
+    g.data.scaling .* GB2Luxor.(g.data.layout(g.data.graph))
+end
