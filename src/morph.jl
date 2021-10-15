@@ -17,12 +17,12 @@ to [`get_starting_positions(g)`](@ref)
 """
 function jgraph_morph(
     g::JGraph,
-    layout_to::Vector{T},
+    layout_to::Vector,
     scaling_to;
     frames = nothing,
     starting_positions = get_starting_positions(g),
     closed=false,
-) where {T<:NetworkLayout.AbstractLayout}
+)
 
     frames = isnothing(frames) ? g.data.frames : frames
     if closed 
@@ -47,7 +47,7 @@ end
 
 function jgraph_morph(
     g::JGraph,
-    layout_to::NetworkLayout.AbstractLayout,
+    layout_to,
     scaling_to;
     frames = nothing,
     starting_positions = get_starting_positions(g),
