@@ -12,24 +12,31 @@ to determine the configuration to reach.
 # Keywords
 - `frames` a range of frames during which the the morph will take place.
 If not specified the animation will last as long aas the JGraph itself.
+- `starting_positions` specifies the starting positions of each node, defaults 
+to [`get_starting_positions(g)`](@ref)
 """
 function jgraph_morph(
     g::JGraph,
     layout_to::Vector{T},
     scaling_to;
     frames = nothing,
+    starting_positions = get_starting_positions(g),
 ) where {T<:NetworkLayout.AbstractLayout}
-    length(layout_to) <= 1 &&
-        error("For a single layout don't use a vector but the layout itself as argument.")
-    Jnodes = jnodes(g)
+
     frames = isnothing(frames) ? g.data.frames : frames
-    positions = [
-        scale .* GB2Luxor.(lay(g.data.graph)) for (lay, scale) in zip(layout_to, scaling_to)
-    ]
-    for (node, args...) in zip(Jnodes, positions...)
-        act!(node, Action(frames, follow_path([i for i in args], closed = false)))
+    frames_stops =
+        floor.(Int, range(first(frames) - 1, last(frames), length = length(layout_to) + 1))
+
+    for i in 1:length(layout_to)
+        starting_positions = jgraph_morph(
+            g,
+            layout_to[i],
+            scaling_to[i],
+            frames = (frames_stops[i] + 1):frames_stops[i + 1],
+            starting_positions = starting_positions,
+        )
     end
-    return g
+    return starting_positions
 end
 
 function jgraph_morph(
@@ -37,12 +44,13 @@ function jgraph_morph(
     layout_to::NetworkLayout.AbstractLayout,
     scaling_to;
     frames = nothing,
+    starting_positions = get_starting_positions(g),
 )
     Jnodes = jnodes(g)
     frames = isnothing(frames) ? g.data.frames : frames
     positions = scaling_to .* GB2Luxor.(layout_to(g.data.graph))
-    for (node, pos_to) in zip(Jnodes, positions)
-        act!(node, Action(frames, anim_translate(pos_to...)))
+    for (node, pos_from, pos_to) in zip(Jnodes, starting_positions, positions)
+        act!(node, Action(GFrames(frames), anim_translate(pos_from, pos_to)))
     end
-    return g
+    return positions
 end
