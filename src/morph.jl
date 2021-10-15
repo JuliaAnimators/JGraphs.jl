@@ -21,12 +21,18 @@ function jgraph_morph(
     scaling_to;
     frames = nothing,
     starting_positions = get_starting_positions(g),
+    closed=false,
 ) where {T<:NetworkLayout.AbstractLayout}
 
     frames = isnothing(frames) ? g.data.frames : frames
+    if closed 
+        push!(layout_to, g.data.layout)
+        push!(scaling_to, g.data.scaling)
+    end
+
     frames_stops =
         floor.(Int, range(first(frames) - 1, last(frames), length = length(layout_to) + 1))
-
+     
     for i in 1:length(layout_to)
         starting_positions = jgraph_morph(
             g,
