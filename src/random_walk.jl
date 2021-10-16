@@ -19,7 +19,6 @@ function jgraph_walk(g::JGraph, walk_func)
         Animation([0.0, 1.0], [Lab(colorant"black"), Lab(colorant"red")], [sineio()])
     acted_nodes = []
     acted_edges = []
-    # act!(Jnodes[random_walk[1]], Action(1:step_length, color_anim, sethue()))
     act!(Jnodes[random_walk[1]], Action(1:step_length, change(:color, colorant"black"=>colorant"red")))
     for (idx, v) in enumerate(random_walk[2:end])
         from = (idx - 1) * step_length + 1
