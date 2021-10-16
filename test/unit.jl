@@ -39,7 +39,7 @@ end
     gd = JGraphData(g, NetworkLayout.Shell(), scaling = 100)
     jg = JGraph(gd)
     for node in jnodes(jg)
-        act!(node, Action(anim_rotate(2π)))
+        act!(node, Action(anim_rotate_around(2π, O)))
     end
     render(testvideo, tempdirectory = "images", pathname = "")
 
