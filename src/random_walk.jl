@@ -18,17 +18,21 @@ function jgraph_walk(g::JGraph, walk_func)
     color_anim =
         Animation([0.0, 1.0], [Lab(colorant"black"), Lab(colorant"red")], [sineio()])
     acted_nodes = []
-    act!(Jnodes[random_walk[1]], Action(1:step_length, color_anim, sethue()))
+    acted_edges = []
+    # act!(Jnodes[random_walk[1]], Action(1:step_length, color_anim, sethue()))
+    act!(Jnodes[random_walk[1]], Action(1:step_length, change(:color, colorant"black"=>colorant"red")))
     for (idx, v) in enumerate(random_walk[2:end])
         from = (idx - 1) * step_length + 1
         to = idx * step_length
-        !(v in acted_nodes) && act!(Jnodes[v], Action(from:to, color_anim, sethue()))
+        !(v in acted_nodes) && act!(Jnodes[v], Action(from:to, change(:color, colorant"black"=>colorant"red")))
         push!(acted_nodes, v)
-        if haskey(Jedges, v => random_walk[idx])
+        if haskey(Jedges, v => random_walk[idx]) && !in(v => random_walk[idx], acted_edges)
             ce = Jedges[v => random_walk[idx]]
+            push!(acted_edges, ce)
             act!(ce, Action(from:to, color_anim, sethue()))
-        else
+        elseif !in(v => random_walk[idx], acted_edges)
             ce = Jedges[random_walk[idx] => v]
+            push!(acted_edges, ce)
             act!(ce, Action(from:to, color_anim, sethue()))
         end
     end

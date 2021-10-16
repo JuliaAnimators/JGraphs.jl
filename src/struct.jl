@@ -32,7 +32,7 @@ The keyword arguments will increase to increase in the future.
 function JGraphData(
     graph::AbstractGraph,
     layout = NetworkLayout.Shell();
-    node_templates = JCircle(O, 3, color="black", action=:fill),
+    node_templates = JCircle(O, 3, color=colorant"black", action=:fill),
     edge_color = colorant"black",
     edge_size = 1,
     scaling = 20,

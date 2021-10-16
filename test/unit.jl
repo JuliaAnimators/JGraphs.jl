@@ -57,8 +57,6 @@ end
     gd = JGraphData(g, NetworkLayout.Shell(), scaling = 100)
     jg = JGraph(gd)
 
-    # jgraph_morph(jg, NetworkLayout.Spring(), 50, frames = 1:15)
-    # jgraph_morph(jg, NetworkLayout.Shell(), 100, frames = 16:30)
     jgraph_morph(jg, [NetworkLayout.Spring(), NetworkLayout.Shell()], [50, 100])
     render(testvideo, tempdirectory = "images", pathname = "")
 

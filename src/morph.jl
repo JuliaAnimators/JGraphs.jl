@@ -56,7 +56,7 @@ function jgraph_morph(
     frames = isnothing(frames) ? g.data.frames : frames
     positions = scaling_to .* GB2Luxor.(layout_to(g.data.graph))
     for (node, pos_from, pos_to) in zip(Jnodes, starting_positions, positions)
-        act!(node, Action(GFrames(frames), anim_translate(pos_from, pos_to)))
+        act!(node, Action(frames, anim_translate(pos_from, pos_to)))
     end
     return positions
 end
