@@ -1,10 +1,9 @@
 mutable struct JGraphData
     graph::AbstractGraph
-    layout::NetworkLayout.AbstractLayout
-    node_color
-    node_size
+    layout
+    node_templates
     edge_color
-    edge_width
+    edge_size
     scaling
     frames
     numbered
@@ -23,8 +22,7 @@ The keyword arguments will increase to increase in the future.
 - `layout::NetworkLayout.AbstractLayout`: A layout as provided by `NetworkLayout` to place the graph nodes in sapce.
 
 # Keywords
-- `node_color` sets the color of all nodes
-- `node_size` sets the size of all nodes
+- `node_template` provide function that could be used as the function argument of an `Object`
 - `edges_color` sets the colors of all edges
 - `edges_width` sets the width of all edges
 - `scaling` scales the positions of all nodes
@@ -33,25 +31,21 @@ The keyword arguments will increase to increase in the future.
 """
 function JGraphData(
     graph::AbstractGraph,
-    layout::NetworkLayout.AbstractLayout = NetworkLayout.Shell();
-    node_color = colorant"black",
-    node_size = 3,
+    layout = NetworkLayout.Shell();
+    node_templates = JCircle(O, 3, color="black", action=:fill),
     edge_color = colorant"black",
-    edge_width = 1,
+    edge_size = 1,
     scaling = 20,
-    frames = first(Javis.CURRENT_VIDEO[1].background_frames):last(
-        Javis.CURRENT_VIDEO[1].background_frames,
-    ),
+    frames = Javis.CURRENT_VIDEO[1].background_frames,
     numbered = false,
 )
 
     return JGraphData(
         graph,
         layout,
-        node_color,
-        node_size,
+        node_templates,
         edge_color,
-        edge_width,
+        edge_size,
         scaling,
         frames,
         numbered,
@@ -69,15 +63,32 @@ function _JGraph(g::JGraphData)
 
     points = [g.scaling * GB2Luxor(point) for point in g.layout(g.graph)]
 
-    Jnodes = [
-        Object(draw_node(center = point, radius = g.node_size, action = :fill)) for
-        point in points
-    ]
+    Jnodes = if isa(g.node_templates, Function)
+        [
+            Object(:same, g.node_templates, point) for
+            point in points
+        ]
+
+    elseif length(g.node_templates) == 1
+        [
+            Object(:same, g.node_templates[1], point) for
+            point in points
+        ]
+
+    else
+        length(g.node_templates) != length(points) &&
+            error("Either a single function or one for each node should be provided as node_template")
+
+        [
+            Object(:same, node_template, point) for
+            (node_template, point) in zip(g.node_templates, points)
+        ]
+    end
 
     Jedges = Dict([
         (e.src => e.dst) => Object(
             (args...) -> begin
-                setline(g.edge_width)
+                setline(g.edge_size)
                 line(pos(Jnodes[e.src]), pos(Jnodes[e.dst]), :stroke)
             end,
         ) for e in edges(g.graph)
