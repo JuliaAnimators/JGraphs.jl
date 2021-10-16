@@ -36,7 +36,7 @@ function JGraphData(
     edge_color = colorant"black",
     edge_size = 1,
     scaling = 20,
-    frames = Javis.CURRENT_VIDEO[1].background_frames,
+    frames = Javis.get_frames(Javis.CURRENT_VIDEO[1].objects[1]),
     numbered = false,
 )
 
