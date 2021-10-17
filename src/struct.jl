@@ -4,7 +4,8 @@ mutable struct JGraphData
     node_templates
     edge_color
     edge_size
-    scaling
+    width
+    height
     frames
     numbered
 end
@@ -19,13 +20,14 @@ The keyword arguments will increase to increase in the future.
 
 # Arguments 
 - `graph::AbstractGraph`: A graph as created with `LightGraphs` and affiliate packages
-- `layout::NetworkLayout.AbstractLayout`: A layout as provided by `NetworkLayout` to place the graph nodes in sapce.
+- `layout::NetworkLayout.AbstractLayout`: A layout as provided by `NetworkLayout` to place the graph nodes in space.
 
 # Keywords
 - `node_template` provide function that could be used as the function argument of an `Object`
 - `edges_color` sets the colors of all edges
-- `edges_width` sets the width of all edges
-- `scaling` scales the positions of all nodes
+- `edges_size` sets the width of all edges
+- `width` sets the width to which the graph will be adjusted
+- `height` sets  the height to which the graph will be adjusted
 - `frames` the frames during which the animations on the graph will last if not specified elsewhere
 - `numbered` Defaults to `false` if set to `true` labels the nodes with their number as vertices in the graph.
 """
@@ -35,7 +37,8 @@ function JGraphData(
     node_templates = JCircle(O, 3, color=colorant"black", action=:fill),
     edge_color = colorant"black",
     edge_size = 1,
-    scaling = 20,
+    width = 300,
+    height = 300,
     frames = Javis.get_frames(Javis.CURRENT_VIDEO[1].objects[1]),
     numbered = false,
 )
@@ -46,7 +49,8 @@ function JGraphData(
         node_templates,
         edge_color,
         edge_size,
-        scaling,
+        width,
+        height,
         frames,
         numbered,
     )
@@ -61,7 +65,8 @@ end
 
 function _JGraph(g::JGraphData)
 
-    points = [g.scaling * GB2Luxor(point) for point in g.layout(g.graph)]
+    # points = [g.scaling * GB2Luxor(point) for point in g.layout(g.graph)]
+    points = _adapt_to_lims(g.layout(g.graph), g.width, g.height)
 
     Jnodes = if isa(g.node_templates, Function)
         [
@@ -87,8 +92,9 @@ function _JGraph(g::JGraphData)
 
     Jedges = Dict([
         (e.src => e.dst) => Object(
-            (args...) -> begin
+            (args...; color=colorant"black") -> begin
                 setline(g.edge_size)
+                sethue(color)
                 line(pos(Jnodes[e.src]), pos(Jnodes[e.dst]), :stroke)
             end,
         ) for e in edges(g.graph)
@@ -150,5 +156,5 @@ Returns the positions as obtained using the layout and the graph stored
 in `g.data`.
 """
 function get_starting_positions(g::JGraph)
-    g.data.scaling .* GB2Luxor.(g.data.layout(g.data.graph))
+    [node.start_pos for node in g.jnodes]
 end
