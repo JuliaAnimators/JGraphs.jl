@@ -1,5 +1,5 @@
 """
-    jgraph_morph(g::JGraph, layout_to, scaling_to; frames=nothing)
+    jgraph_morph(g::JGraph, layout_to, lims_to; frames=nothing)
 
 This functions allows to animate the change from one layout to another for a graph.
 
@@ -7,10 +7,10 @@ This functions allows to animate the change from one layout to another for a gra
 - `g::JGraph` the `JGraph` to animate.
 - `layout_to` a `NetworkLayout.AbstractLayout` or a `Vector{NetworkLayout.AbstractLayout}` that will be applied to nodes and edges 
 to determine the configuration to reach.
-- `scaling_to` a scaling factor or a vector of scaling factors to scale the positions of nodes and edges in the animation.
+- `lims_to` a tuple or a vector of tuples each holding width and height to scale the positions of nodes and edges in the animation.
 
 # Keywords
-- `frames` a range of frames during which the the morph will take place.
+- `frames` a range of frames during which the morph will take place.
 If not specified the animation will last as long aas the JGraph itself.
 - `starting_positions` specifies the starting positions of each node, defaults 
 to [`get_starting_positions(g)`](@ref)
@@ -18,7 +18,7 @@ to [`get_starting_positions(g)`](@ref)
 function jgraph_morph(
     g::JGraph,
     layout_to::Vector,
-    scaling_to;
+    lims_to::Vector;
     frames = nothing,
     starting_positions = get_starting_positions(g),
     closed=false,
@@ -27,7 +27,8 @@ function jgraph_morph(
     frames = isnothing(frames) ? g.data.frames : frames
     if closed 
         push!(layout_to, g.data.layout)
-        push!(scaling_to, g.data.scaling)
+        push!(lims_to[1], g.data.width)
+        push!(lims_to[2], g.data.height)
     end
 
     frames_stops =
@@ -37,7 +38,7 @@ function jgraph_morph(
         starting_positions = jgraph_morph(
             g,
             layout_to[i],
-            scaling_to[i],
+            lims_to[i],
             frames = (frames_stops[i] + 1):frames_stops[i + 1],
             starting_positions = starting_positions,
         )
@@ -48,13 +49,13 @@ end
 function jgraph_morph(
     g::JGraph,
     layout_to,
-    scaling_to;
+    lims_to;
     frames = nothing,
     starting_positions = get_starting_positions(g),
 )
     Jnodes = jnodes(g)
     frames = isnothing(frames) ? g.data.frames : frames
-    positions = scaling_to .* GB2Luxor.(layout_to(g.data.graph))
+    positions = _adapt_to_lims(layout_to(g.data.graph), lims_to...)
     for (node, pos_from, pos_to) in zip(Jnodes, starting_positions, positions)
         act!(node, Action(frames, anim_translate(pos_from, pos_to)))
     end

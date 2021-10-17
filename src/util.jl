@@ -19,3 +19,24 @@ function draw_node(args...; center, radius, action)
         return center
     end
 end
+
+"""
+    _adapt_to_lims(points, width, height)
+
+Rescales a vector of points to fit in height and width to keep it simple
+it uses the smallest among x and y needed variation to rescale both.
+"""
+function _adapt_to_lims(points, width, height)
+    xs = [p[1] for p in points]
+    ys = [p[2] for p in points]
+    
+    xmin, xmax = abs(minimum(xs)), abs(maximum(xs))
+    ymin, ymax = abs(minimum(ys)), abs(maximum(ys))
+
+    xscaling = min(width / 2xmin, width / 2xmax)
+    yscaling = min(height / 2ymin, height / 2ymax)
+    
+    scaling = min(xscaling, yscaling)
+
+    return [Point(p[1] * scaling, p[2] * scaling) for p in points]
+end

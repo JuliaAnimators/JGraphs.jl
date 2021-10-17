@@ -11,28 +11,39 @@ a set of nodes linked each to the following one by and edge present in the graph
 One can use `randomwalk` and `non_backtracking_randomwalk` from `LightGraphs`.
 """
 function jgraph_walk(g::JGraph, walk_func)
+
+    # TODO add color palette for sequential coloring of repeatedly transversed edges
     Jnodes = jnodes(g)
     Jedges = jedges(g)
     random_walk = walk_func(g.data.graph)
     step_length = g.data.frames[end] ÷ length(random_walk)
-    color_anim =
-        Animation([0.0, 1.0], [Lab(colorant"black"), Lab(colorant"red")], [sineio()])
-    acted_nodes = []
-    acted_edges = []
+    acted_nodes = Dict()
+    acted_edges = Dict()
     act!(Jnodes[random_walk[1]], Action(1:step_length, change(:color, colorant"black"=>colorant"red")))
     for (idx, v) in enumerate(random_walk[2:end])
         from = (idx - 1) * step_length + 1
         to = idx * step_length
-        !(v in acted_nodes) && act!(Jnodes[v], Action(from:to, change(:color, colorant"black"=>colorant"red")))
-        push!(acted_nodes, v)
-        if haskey(Jedges, v => random_walk[idx]) && !in(v => random_walk[idx], acted_edges)
-            ce = Jedges[v => random_walk[idx]]
-            push!(acted_edges, ce)
-            act!(ce, Action(from:to, color_anim, sethue()))
-        elseif !in(v => random_walk[idx], acted_edges)
-            ce = Jedges[random_walk[idx] => v]
-            push!(acted_edges, ce)
-            act!(ce, Action(from:to, color_anim, sethue()))
+
+        if !haskey(acted_nodes, v) 
+            act!(Jnodes[v], Action(from:to, change(:color, colorant"black"=>colorant"red")))
+            acted_nodes[v] = 1
+        else
+            act!(Jnodes[v], Action(from:to, change(:color, colorant"red"=>colorant"red")))
+            acted_nodes[v] += 1
+        end
+
+        ce = if haskey(Jedges, v => random_walk[idx])
+            v => random_walk[idx]
+        else
+            random_walk[idx] => v
+        end
+
+        if  !haskey(acted_edges, ce)
+            act!(Jedges[ce], Action(from:to, change(:color, colorant"black"=>colorant"red")))
+            acted_edges[ce] = 1
+        else
+            act!(Jedges[ce], Action(from:to, change(:color, colorant"red"=>colorant"red")))
+            acted_edges[ce] += 1
         end
     end
 end
