@@ -23,4 +23,7 @@ export jgraph_walk
 include("morph.jl")
 export jgraph_morph
 
+include("modify.jl")
+export jadd_vertex!
+
 end #module
