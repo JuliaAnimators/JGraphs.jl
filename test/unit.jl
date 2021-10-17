@@ -4,6 +4,7 @@
 @testset "tmpdir" begin
 
     #=
+    TAKEN FROM JAVIS
     Leftover files from failed tests or errors can cause testing errors.
     Therefore, we remove any files in the `images` directory not pertinent to testing before executing a test.
     =#
@@ -36,7 +37,7 @@ end
     testvideo = Video(400, 400)
     Background(1:30, ground())
     g = complete_graph(8)
-    gd = JGraphData(g, NetworkLayout.Shell(), scaling = 100)
+    gd = JGraphData(g, NetworkLayout.Shell(),  width = 100, height = 100)
     jg = JGraph(gd)
     for node in jnodes(jg)
         act!(node, Action(anim_rotate_around(2π, O)))
@@ -54,10 +55,10 @@ end
     testvideo = Video(400, 400)
     Background(1:30, ground())
     g = complete_graph(8)
-    gd = JGraphData(g, NetworkLayout.Shell(), scaling = 100)
+    gd = JGraphData(g, NetworkLayout.Shell(), width = 100, height = 100)
     jg = JGraph(gd)
 
-    jgraph_morph(jg, [NetworkLayout.Spring(), NetworkLayout.Shell()], [50, 100])
+    jgraph_morph(jg, [NetworkLayout.Spring(), NetworkLayout.Shell()], [(50, 50), (100, 100)])
     render(testvideo, tempdirectory = "images", pathname = "")
 
     for frame_id in [7, 15, 23, 30]
@@ -75,7 +76,7 @@ end
     testvideo = Video(400, 400)
     Background(1:30, ground())
     g = complete_graph(8)
-    gd = JGraphData(g, NetworkLayout.Shell(), scaling = 100)
+    gd = JGraphData(g, NetworkLayout.Shell(), width = 100, height = 100)
     jg = JGraph(gd)
 
     jgraph_walk(jg, g -> [vertices(g); 1])
@@ -96,10 +97,10 @@ end
     testvideo = Video(400, 400)
     Background(1:100, ground("white", "black"))
     g = barbell_graph(5, 10)
-    gd = JGraphData(g, NetworkLayout.Spring(), scaling = 40)
+    gd = JGraphData(g, NetworkLayout.Spring(), width = 40, height = 40)
     jg = JGraph(gd)
     jgraph_walk(jg, g -> vertices(g))
-    jgraph_morph(jg, NetworkLayout.Shell(), 100)
+    jgraph_morph(jg, NetworkLayout.Shell(), (100, 100))
     render(testvideo, tempdirectory = "images", pathname = "")
 
     for frame_id in [1, 5, 10, 50, 75, 100]
