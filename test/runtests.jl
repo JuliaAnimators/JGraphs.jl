@@ -17,5 +17,16 @@ end
 
 
 @testset "JGraphs.jl" begin
-    include("unit.jl")
+    @testset "Unit" begin
+        include("unit.jl")
+    end
+    @testset "graph_func" begin
+        include("graph_func.jl")
+    end
+    @testset "final_clean" begin
+        for image in readdir("images", join = true)
+            endswith(image, "png") && rm(image)
+        end
+        @test readdir("images") == [".keep"]
+    end
 end
